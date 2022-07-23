@@ -1,6 +1,11 @@
 import React from 'react'
 import styled from 'styled-components';
 
+import { CheckBox } from '@mui/icons-material';
+import { FormGroup, FormControlLabel } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+
+
 const TodoItemContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.39);
   display: inline-block;
@@ -26,6 +31,11 @@ export default function TodoItem({title="Dummy", description}) {
         <TodoItemTitle>{title}</TodoItemTitle>
         
         <TodoItemDescription>{description}</TodoItemDescription>
+
+        <FormGroup>
+          <FormControlLabel control={<Checkbox defaultChecked />} />
+        </FormGroup>
+
     </TodoItemContainer>
   )
 }

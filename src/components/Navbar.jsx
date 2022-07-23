@@ -9,11 +9,12 @@ import { Link } from 'react-router-dom';
 const NavbarContainer = styled.div`
   background-color: grey;
   margin: 0;
-  padding: 0;
+  padding: 2rem 0;
   flex: .1;
   height: 100vh;
   display: flex;
   flex-flow: column;
+  align-items: center;
 `
 
 const NavbarList = styled.ul`
@@ -47,7 +48,8 @@ export default function Navbar() {
   return (
     <NavbarContainer>
 
-      <Button variant='contained'><AddIcon /></Button>
+      <Link to="/createTodoZoznam"><Button variant='contained'><AddIcon /></Button></Link>
+      
 
       <NavbarList>
 

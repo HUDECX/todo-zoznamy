@@ -1,5 +1,5 @@
 import './App.css';
-import Navbar from './components/navbar/Navbar';
+import Navbar from './components/Navbar';
 import TodoZoznam from './routes/TodoZoznam';
 import CreateTodoZoznam from './routes/CreateTodoZoznam';
 import {
@@ -8,19 +8,21 @@ import {
   Route,
 } from "react-router-dom";
 
+
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+        <BrowserRouter>
 
-        {/* navigacia po stranke */}
-        <Navbar />
+          {/* navigacia po stranke */}
+          <Navbar />
 
-        <Routes>
-          <Route path='/' element={<TodoZoznam />}/>
-          <Route path='createTodoZoznam' element={<CreateTodoZoznam />}/>
-        </Routes>
-      </BrowserRouter>
+          <Routes>
+            <Route path='/' element={<TodoZoznam />}/>
+            <Route path='createTodoZoznam' element={<CreateTodoZoznam />}/>
+          </Routes>
+        </BrowserRouter>
+
 
     </div>
   );
