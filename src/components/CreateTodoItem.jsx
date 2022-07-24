@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 
@@ -14,6 +14,7 @@ const TodoItem = styled.div`
   border-radius: 2rem;
   padding: 2rem;
   border: 3px solid black;
+  position: relative;
 `;
 
 
@@ -25,11 +26,36 @@ const TodoItemText = styled(TextareaAutosize)`
   color: white;
 `;
 
-export default function CreateTodoItem() {
+const RemoveTodoButton = styled(Button)`
+  position: absolute!important;
+  right: 1rem;
+  bottom: 1rem;
+  background-color: red!important;
+`;
+
+export default function CreateTodoItem({removeTodo ,getTodoData, id}) {
+
+  const [todoTitle, setTodoTitle] = useState("");
+  const [todoText, setTodoText] = useState("");
+  const [todoDeadline, setTodoDeadline] = useState("");
+
+  useEffect(() => {
+
+
+    const data = {
+      id,
+      todoTitle,
+      todoText,
+      todoDeadline
+    };
+    getTodoData(data);
+  },[todoTitle,todoText,todoDeadline])
+
+
   return (
     <TodoItem>
-        <TextField id="filled-basic" label="Todo title" variant="filled" />
-        <TodoItemText aria-label="empty textarea" placeholder="Zadajte text pre toto Todo" />
+        <TextField id="filled-basic" label="Todo title" variant="filled" value={todoTitle} onChange={(event) => setTodoTitle(event.target.value)}/>
+        <TodoItemText aria-label="empty textarea" placeholder="Zadajte text pre toto Todo" value={todoText} onChange={(event) => setTodoText(event.target.value)} />
         <TextField
           id="date"
           label="Deadline"
@@ -39,7 +65,9 @@ export default function CreateTodoItem() {
           InputLabelProps={{
             shrink: true,
           }}
+          value={todoDeadline} onChange={(event) => setTodoDeadline(event.target.value)}
         />
+        <RemoveTodoButton variant='contained' onClick={() => removeTodo(id)}>X</RemoveTodoButton>
     </TodoItem>
   )
 }

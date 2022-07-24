@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import axios from 'axios';
 
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom';
+import NavbarLink from './NavbarLink';
 
 
 const NavbarContainer = styled.div`
@@ -29,22 +31,24 @@ const NavbarList = styled.ul`
   height: 100%;
 `;
 
-const NavbarItem = styled.li`
-  padding: 1rem;
-  text-decoration: none;
-`;
 
 
-const NavbarLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-  &:hover{
-    text-decoration: underline;
-  }
-`;
 
 
 export default function Navbar() {
+
+  
+
+  const [navbarLinks,setNavbarLinks] = useState([]);
+
+  useEffect(() => {
+    axios.get("https://6288f3d010e93797c160f01a.mockapi.io/todo")
+        .then(res => {
+          console.log(JSON.stringify(res.data));
+          setNavbarLinks(res.data)
+        } )
+  })
+
   return (
     <NavbarContainer>
 
@@ -53,25 +57,11 @@ export default function Navbar() {
 
       <NavbarList>
 
-        <NavbarItem>
-          <NavbarLink to='/'>aaaaa</NavbarLink>
-        </NavbarItem>
+        
+        <NavbarLink to={"/"} text="Home"/>
 
-        <NavbarItem>
-          <NavbarLink to='/createTodoZoznam'>bbbbb</NavbarLink>
-        </NavbarItem>
-
-        <NavbarItem>
-          <NavbarLink to='/'>ccccc</NavbarLink>
-        </NavbarItem>
-
-        <NavbarItem>
-          <NavbarLink to='/'>ddddd</NavbarLink>
-        </NavbarItem>
-
-        <NavbarItem
-        ><NavbarLink to='/'>eeeee</NavbarLink>
-      </NavbarItem>
+        {navbarLinks.map(link => <NavbarLink to={`/${link.zoznamTitle}`} text={link.zoznamTitle}/>)}
+        
 
       </NavbarList>
     </NavbarContainer>

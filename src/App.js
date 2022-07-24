@@ -1,5 +1,5 @@
 import './App.css';
-import Navbar from './components/Navbar';
+import Navbar from './components/navbar/Navbar';
 import TodoZoznam from './routes/TodoZoznam';
 import CreateTodoZoznam from './routes/CreateTodoZoznam';
 import {
