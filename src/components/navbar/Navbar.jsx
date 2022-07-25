@@ -44,7 +44,6 @@ export default function Navbar() {
   useEffect(() => {
     axios.get("https://6288f3d010e93797c160f01a.mockapi.io/todo")
         .then(res => {
-          console.log(JSON.stringify(res.data));
           setNavbarLinks(res.data)
         } )
   })
@@ -58,7 +57,7 @@ export default function Navbar() {
       <NavbarList>
 
         
-        <NavbarLink to={"/"} text="Home"/>
+        {/* <NavbarLink to={"/"} text="Home"/> */}
 
         {navbarLinks.map(link => <NavbarLink to={`/${link.zoznamTitle}`} text={link.zoznamTitle}/>)}
         

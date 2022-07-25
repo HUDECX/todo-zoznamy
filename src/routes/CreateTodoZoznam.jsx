@@ -51,6 +51,7 @@ const AddTodoButton = styled(Button)`
 export default function CreateTodoZoznam() {
 
 
+
   //prida novy todo do setTodoItems array
   const addTodo = () => {
     let copy = [...todoItems];   
@@ -88,9 +89,10 @@ export default function CreateTodoZoznam() {
   const sendDataToApi = () => {
     const todoZoznam = {
       zoznamTitle: todoZoznamTitle,
-      todoItems: {...todoItems}
+      todoItems: [...todoItems]
     }
     axios.post("https://6288f3d010e93797c160f01a.mockapi.io/todo", todoZoznam)
+
   };
 
 
@@ -100,9 +102,9 @@ export default function CreateTodoZoznam() {
   const [todoItems,setTodoItems] = useState([
     {
       id: 0,
-      title: "",
-      text: "",
-      deadline: ""
+      todoTitle: "",
+      todoText: "",
+      todoDeadline: ""
     }
   ]);
 

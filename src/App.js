@@ -7,6 +7,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import Zoznam from './routes/[zoznam]';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
 
           <Routes>
             <Route path='/' element={<TodoZoznam />}/>
+            <Route path='/:zoznam' element={<Zoznam />}/>
             <Route path='createTodoZoznam' element={<CreateTodoZoznam />}/>
           </Routes>
         </BrowserRouter>

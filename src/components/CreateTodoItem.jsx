@@ -48,6 +48,7 @@ export default function CreateTodoItem({removeTodo ,getTodoData, id}) {
       todoText,
       todoDeadline
     };
+
     getTodoData(data);
   },[todoTitle,todoText,todoDeadline])
 
