@@ -57,7 +57,6 @@ export default function Navbar() {
       <NavbarList>
 
         
-        {/* <NavbarLink to={"/"} text="Home"/> */}
 
         {navbarLinks.map(link => <NavbarLink to={`/${link.zoznamTitle}`} text={link.zoznamTitle}/>)}
         

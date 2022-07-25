@@ -52,7 +52,7 @@ export default function Zoznam() {
 
         <TodoItemContainer>
           
-          {usedZoznam.todoItems.map(todo => <TodoItem title={todo.todoTitle} description={todo.todoText} />)}
+          {usedZoznam.todoItems.map(todo => <TodoItem key={usedZoznam.id} title={todo.todoTitle} description={todo.todoText} />)}
           
         </TodoItemContainer>
 
