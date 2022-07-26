@@ -6,6 +6,8 @@ import TodoItem from '../components/TodoItem';
 import { Button } from '@mui/material';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import TextField from "@mui/material/TextField";
+import { SearchRounded } from "@mui/icons-material";
 
 const TodoZoznamContainer = styled.div`
     height: 100vh;
@@ -34,21 +36,25 @@ const CompletedTag = styled.div`
   padding: 2rem;
   border-radius: 2rem;
   display: inline-block;
-  position: absolute;
   left: 1rem;
   top: 1rem;
 `;
 
 const MarkAsCompletedButton = styled(Button)`
-    position: absolute!important;
-    top: 3rem;
-    left: 15rem;
+    // top: 3rem;
+    // left: 15rem;
 `;
 
 
 const FilterButtons = styled(ToggleButton)`
     color: ${props => props.selected ? "blue!important" : "white!important"};
     border-color: white!important;
+    display: inline-flex;
+`;
+
+const ZoznamNavigation = styled.div`
+    display: flex;
+    justify-content: space-around;
 `;
 
 
@@ -59,6 +65,7 @@ export default function Zoznam({handleChange}) {
   const [loading, setLoading] = useState(true);
   const [usedZoznam, setUsedZoznam] = useState({});
   const [activeFilter, setActiveFilter] = useState("left");
+  const [searchText, setSearchText] = useState("");
 
   // ziska data z api a a ked sa resolvne promise tak tak si ulozi index pozadovaneho zoznamu podla zoznam = useParams
   // a ulozi pozadovany zoznam do usedZoznam a vypne loading
@@ -116,6 +123,15 @@ export default function Zoznam({handleChange}) {
 
 
 
+  const searchFilter = item => {
+    return item.filter(item => {
+      if(searchText === ""){
+        return item
+      }else if(item.todoTitle.toLowerCase().includes(searchText.toLocaleLowerCase())){
+        return item
+      }
+    })
+  };
 
 
 
@@ -126,37 +142,44 @@ export default function Zoznam({handleChange}) {
       <TodoZoznamContainer>
         {/* nazov zoznamu */}
         <PageTitle>{zoznam}</PageTitle>
+        <ZoznamNavigation>
 
-        {/* label ci je zoznam completed alebo nie */}
-        {usedZoznam.completed ? <CompletedTag completed={usedZoznam.completed}>Hotovo</CompletedTag> : <CompletedTag completed={usedZoznam.completed}>Treba spraviť</CompletedTag>}
-        {/* button na oznacenie ze je zoznam completed */}
-        <MarkAsCompletedButton onClick={markZoznamAsCompleted} variant="contained">Mark as completed</MarkAsCompletedButton>
+          {/* label ci je zoznam completed alebo nie */}
+          {usedZoznam.completed ? <CompletedTag completed={usedZoznam.completed}>Hotovo</CompletedTag> : <CompletedTag completed={usedZoznam.completed}>Treba spraviť</CompletedTag>}
 
-        {/* button group na filtrovanie obsahu medzi All/Done/Active */}
-        <ToggleButtonGroup
-          value={activeFilter}
-          exclusive
-          onChange={changeFilter}
-          aria-label="text alignment"
-          sx={{position: "absolute", right: "15rem", top: "3rem"}}
-        >
-          <FilterButtons value="left" aria-label="left aligned">
-            All
-          </FilterButtons>
-          <FilterButtons value="center" aria-label="centered">
-            Done
-          </FilterButtons>
-          <FilterButtons value="right" aria-label="right aligned">
-            Active
-          </FilterButtons>
-          
-        </ToggleButtonGroup>
+          {/* button na oznacenie ze je zoznam completed */}
+          <MarkAsCompletedButton onClick={markZoznamAsCompleted} variant="contained">Mark as completed</MarkAsCompletedButton>
+
+          <TextField id="filled-basic" label="Filled" variant="filled" value={searchText} onChange={(event) => setSearchText(event.target.value)}/>
+
+          {/* button group na filtrovanie obsahu medzi All/Done/Active */}
+          <ToggleButtonGroup
+            value={activeFilter}
+            exclusive
+            onChange={changeFilter}
+            aria-label="text alignment"
+            sx={{position: "absolute", right: "15rem", top: "3rem"}}
+          >
+            <FilterButtons value="left" aria-label="left aligned">
+              All
+            </FilterButtons>
+            <FilterButtons value="center" aria-label="centered">
+              Done
+            </FilterButtons>
+            <FilterButtons value="right" aria-label="right aligned">
+              Active
+            </FilterButtons>
+            
+          </ToggleButtonGroup>
+        </ZoznamNavigation>
+
+
 
 
         <TodoItemContainer>
 
           {/* nevyfiltrovany obsah */}
-          {activeFilter === "left" && usedZoznam.todoItems.map(todo => 
+          {activeFilter === "left" && searchFilter(usedZoznam.todoItems).map(todo => 
             <TodoItem 
               key={todo.id}
               id={todo.id}
@@ -168,7 +191,7 @@ export default function Zoznam({handleChange}) {
             />)}
 
           {/* vyfiltrovany obsah - hotove Todo */}
-          {activeFilter === "center" && usedZoznam.todoItems.filter(item => item.todoDone).map(todo => (
+          {activeFilter === "center" && searchFilter(usedZoznam.todoItems).filter(item => item.todoDone).map(todo => (
             <TodoItem 
             key={todo.id}
             id={todo.id}
@@ -181,7 +204,7 @@ export default function Zoznam({handleChange}) {
           ))}
 
           {/* vyfiltrovany obsah - aktivne Todo */}
-          {activeFilter === "right" && usedZoznam.todoItems.filter(item => !item.todoDone).map(todo => (
+          {activeFilter === "right" && searchFilter(usedZoznam.todoItems).filter(item => !item.todoDone).map(todo => (
             <TodoItem 
             key={todo.id}
             id={todo.id}
