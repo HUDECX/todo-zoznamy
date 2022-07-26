@@ -11,16 +11,19 @@ const NavbarItem = styled.li`
 
 const NavbarAnchor = styled(Link)`
   text-decoration: none;
-  color: white;
+  color: ${props => props.completed ? "green" : "red"};
+  background-color: black;
+  padding: .5rem;
+  border-radius: 1rem;
   &:hover{
     text-decoration: underline;
   }
 `;
 
-export default function NavbarLink({text,to}) {
+export default function NavbarLink({text,to, completed}) {
   return (
     <NavbarItem>
-      <NavbarAnchor to={to}>{text}</NavbarAnchor>
+      <NavbarAnchor completed={completed} to={to}>{text}</NavbarAnchor>
     </NavbarItem>
   )
 }

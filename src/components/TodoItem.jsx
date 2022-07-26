@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 
-import { FormGroup, FormControlLabel, Button } from '@mui/material';
+import { FormControlLabel } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 
 
@@ -55,10 +55,12 @@ export default function TodoItem({title="Dummy", description, deadline, done, id
 
   const [checked, setChecked] = useState(done);
 
+  // oznaci item ako hotovy
   const toggleCheck = () => {
     setChecked(prev => !prev);
   };
 
+  // po zmene itemu na hotovy posle na [zoznam] zmenu
   useEffect(() => {
     markTodoAsCompleted(id, checked)
   },[checked])
@@ -72,7 +74,6 @@ export default function TodoItem({title="Dummy", description, deadline, done, id
 
         {deadline && <TodoDeadline>{deadline}</TodoDeadline>}
         <CheckBox control={<Checkbox checked={checked} />} />
-        <Button onClick={() => console.log(id)}>print</Button>
 
     </TodoItemContainer>
   )

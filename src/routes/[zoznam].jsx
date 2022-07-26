@@ -6,7 +6,6 @@ import TodoItem from '../components/TodoItem';
 import { Button } from '@mui/material';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { act } from "react-dom/test-utils";
 
 const TodoZoznamContainer = styled.div`
     height: 100vh;
@@ -54,70 +53,90 @@ const FilterButtons = styled(ToggleButton)`
 
 
 
-export default function Zoznam() {
+export default function Zoznam({handleChange}) {
 
+  let { zoznam } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [usedZoznam, setUsedZoznam] = useState({});
+  const [activeFilter, setActiveFilter] = useState("left");
+
+  // ziska data z api a a ked sa resolvne promise tak tak si ulozi index pozadovaneho zoznamu podla zoznam = useParams
+  // a ulozi pozadovany zoznam do usedZoznam a vypne loading
   const getZoznamData = () => {
     axios.get("https://6288f3d010e93797c160f01a.mockapi.io/todo") 
     .then(res => {
       const index = res.data.findIndex(todoZoznam => todoZoznam.zoznamTitle === zoznam);
       setUsedZoznam({...res.data[index]});
+    })
+    .catch(err => {
+      console.log(err);
+    })
+    .finally(() => {
       setLoading(false);
     })
   };
 
+  // funkcia je na button ktory oznacuje cely zoznam ako completed
+  // okopiruje cely zoznam a zneguje completed key aby sa to dalo prepinat 
   const markZoznamAsCompleted = () => {
     const newObj = {...usedZoznam, completed: !usedZoznam.completed};
     setUsedZoznam({...newObj})
-    console.log(`toto je newObj: ${JSON.stringify(newObj)}`);
   };
 
+  // funkcia je passnuta ako prop do jednotlivych TodoItemov
+  // okopiruje zoznam ktory sa pouziva, a prepise tam dany Todo item ktoreho checkbox bol zakliknuty
   const markTodoAsCompleted = (id, checked) => {
     const newObj = {...usedZoznam};
     newObj.todoItems[id].todoDone = checked;
     setUsedZoznam(newObj);
   };
   
+  const changeFilter = (event, newFilter) => {
+    newFilter && setActiveFilter(newFilter);
+  };
 
-  let { zoznam } = useParams();
-
-
-
-  const [loading, setLoading] = useState(true);
-  const [usedZoznam, setUsedZoznam] = useState({});
-  const [activeFilter, setActiveFilter] = useState("left");
-
+  // vzdy ked sa zmeni prop(react-router) zo zoznam = useParams() tak sa zapne loading a fetchnu sa sa data pre dany zoznam
   useEffect(() => {
     setLoading(true);
 
-    getZoznamData();
+    getZoznamData()
 
   },[zoznam]);
 
+  // vzdy ked sa zmeni nieco v pouzivanom zozname a sa upravi aj na mockApi podla jeho ID, ale iba v pripade ze usedZoznam.id nieje undefined
+  // aby sa zabranilo errorom
   useEffect(() => {
-    axios.put(`https://6288f3d010e93797c160f01a.mockapi.io/todo/${usedZoznam.id}`, {completed: usedZoznam.completed, todoItems: usedZoznam.todoItems})
+    
+    usedZoznam.id && axios.put(`https://6288f3d010e93797c160f01a.mockapi.io/todo/${usedZoznam.id}`, {completed: usedZoznam.completed, todoItems: usedZoznam.todoItems})
+                      .then(() => {
+                        handleChange()
+                      });
+
   },[usedZoznam])
 
 
-  const handleAlignment = (event, newAlignment) => {
-    newAlignment && setActiveFilter(newAlignment);
-  };
 
 
 
 
   return loading ? (
-    <div>loading</div>
+    <h1>loading - waiting for MockApi</h1>
     ) : (
       
       <TodoZoznamContainer>
+        {/* nazov zoznamu */}
         <PageTitle>{zoznam}</PageTitle>
+
+        {/* label ci je zoznam completed alebo nie */}
         {usedZoznam.completed ? <CompletedTag completed={usedZoznam.completed}>Hotovo</CompletedTag> : <CompletedTag completed={usedZoznam.completed}>Treba spraviť</CompletedTag>}
+        {/* button na oznacenie ze je zoznam completed */}
         <MarkAsCompletedButton onClick={markZoznamAsCompleted} variant="contained">Mark as completed</MarkAsCompletedButton>
 
+        {/* button group na filtrovanie obsahu medzi All/Done/Active */}
         <ToggleButtonGroup
           value={activeFilter}
           exclusive
-          onChange={handleAlignment}
+          onChange={changeFilter}
           aria-label="text alignment"
           sx={{position: "absolute", right: "15rem", top: "3rem"}}
         >
@@ -136,7 +155,7 @@ export default function Zoznam() {
 
         <TodoItemContainer>
 
-          
+          {/* nevyfiltrovany obsah */}
           {activeFilter === "left" && usedZoznam.todoItems.map(todo => 
             <TodoItem 
               key={todo.id}
@@ -148,38 +167,34 @@ export default function Zoznam() {
               markTodoAsCompleted={markTodoAsCompleted}
             />)}
 
-            {activeFilter === "center" && usedZoznam.todoItems.filter(item => item.todoDone).map(todo => (
-              <TodoItem 
-              key={todo.id}
-              id={todo.id}
-              title={todo.todoTitle} 
-              description={todo.todoText} 
-              deadline={todo.todoDeadline} 
-              done={todo.todoDone}
-              markTodoAsCompleted={markTodoAsCompleted}
-            />
-            ))}
+          {/* vyfiltrovany obsah - hotove Todo */}
+          {activeFilter === "center" && usedZoznam.todoItems.filter(item => item.todoDone).map(todo => (
+            <TodoItem 
+            key={todo.id}
+            id={todo.id}
+            title={todo.todoTitle} 
+            description={todo.todoText} 
+            deadline={todo.todoDeadline} 
+            done={todo.todoDone}
+            markTodoAsCompleted={markTodoAsCompleted}
+          />
+          ))}
 
-            {activeFilter === "right" && usedZoznam.todoItems.filter(item => !item.todoDone).map(todo => (
-              <TodoItem 
-              key={todo.id}
-              id={todo.id}
-              title={todo.todoTitle} 
-              description={todo.todoText} 
-              deadline={todo.todoDeadline} 
-              done={todo.todoDone}
-              markTodoAsCompleted={markTodoAsCompleted}
-            />
-            ))}
+          {/* vyfiltrovany obsah - aktivne Todo */}
+          {activeFilter === "right" && usedZoznam.todoItems.filter(item => !item.todoDone).map(todo => (
+            <TodoItem 
+            key={todo.id}
+            id={todo.id}
+            title={todo.todoTitle} 
+            description={todo.todoText} 
+            deadline={todo.todoDeadline} 
+            done={todo.todoDone}
+            markTodoAsCompleted={markTodoAsCompleted}
+          />
+          ))}
 
-            
-
-
-          
         </TodoItemContainer>
 
-
-        <Button onClick={() => console.log(usedZoznam)}>talc</Button>
 
     </TodoZoznamContainer>
   )

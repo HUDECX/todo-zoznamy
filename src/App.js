@@ -7,20 +7,29 @@ import {
   Route,
 } from "react-router-dom";
 import Zoznam from './routes/[zoznam]';
+import { useState } from 'react';
 
 
 function App() {
+
+  // helper aby sa dal updatnut navbar
+  const [change, setChange] = useState(true);
+
+  const handleChange = () => {
+    setChange(prev => !prev);
+  };
+
   return (
     <div className="App">
         <BrowserRouter>
 
           {/* navigacia po stranke */}
-          <Navbar />
+          <Navbar change={change}/>
 
           <Routes>
             <Route path='/' element={<CreateTodoZoznam />}/>
-            <Route path='/:zoznam' element={<Zoznam />}/>
-            <Route path='createTodoZoznam' element={<CreateTodoZoznam />}/>
+            <Route path='/:zoznam' element={<Zoznam handleChange={handleChange}/>}/>
+            <Route path='createTodoZoznam' element={<CreateTodoZoznam handleChange={handleChange}/>}/>
           </Routes>
         </BrowserRouter>
 

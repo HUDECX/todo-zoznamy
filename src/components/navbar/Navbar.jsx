@@ -35,18 +35,27 @@ const NavbarList = styled.ul`
 
 
 
-export default function Navbar() {
+export default function Navbar({change}) {
 
-  
 
   const [navbarLinks,setNavbarLinks] = useState([]);
+  const [nieco, setNieco] = useState(0);
+
+  useEffect(() => {
+    setNieco(prev => prev+1);
+    console.log(change);
+  },[change])
 
   useEffect(() => {
     axios.get("https://6288f3d010e93797c160f01a.mockapi.io/todo")
         .then(res => {
           setNavbarLinks(res.data)
-        } )
-  })
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+  },[nieco])
 
   return (
     <NavbarContainer>
@@ -58,7 +67,13 @@ export default function Navbar() {
 
         
 
-        {navbarLinks.map(link => <NavbarLink to={`/${link.zoznamTitle}`} text={link.zoznamTitle}/>)}
+        {navbarLinks.map(link =>
+          <NavbarLink
+            key={link.id}
+            to={`/${link.zoznamTitle}`}
+            text={link.zoznamTitle}
+            completed={link.completed}
+          />)}
         
 
       </NavbarList>
