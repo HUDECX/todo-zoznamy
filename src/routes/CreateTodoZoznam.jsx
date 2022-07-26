@@ -75,7 +75,6 @@ export default function CreateTodoZoznam() {
       return todo
     })
     setTodoItems([...newArr])
-    console.log(todoItems);
   };
 
   const removeTodo = id => {
@@ -105,7 +104,8 @@ export default function CreateTodoZoznam() {
       id: 0,
       todoTitle: "",
       todoText: "",
-      todoDeadline: ""
+      todoDeadline: "",
+      todoDone: false
     }
   ]);
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 
-import { FormGroup, FormControlLabel } from '@mui/material';
+import { FormGroup, FormControlLabel, Button } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 
 
@@ -14,6 +14,11 @@ const TodoItemContainer = styled.div`
   border-radius: 2rem;
   padding: 2rem;
   border: 3px solid black;
+  cursor: pointer;
+  transition: border-color .2s ease-in-out; 
+  &:hover{
+    border-color: white;
+  }
 `;
 
 const TodoItemTitle = styled.h2`
@@ -31,19 +36,43 @@ const TodoDeadline = styled.p`
   border-radius: 2rem;
 `;
 
+const CheckBox = styled(FormControlLabel)`
+  display: inline;
+  .MuiFormGroup-root .css-dmmspl-MuiFormGroup-root{
+    display: inline-flex!important;
+  }
+  .Mui-checked{
+    color: white!important;
+    fill: white!important;
+  }
+  
+`;
 
 
-export default function TodoItem({title="Dummy", description, deadline}) {
 
+export default function TodoItem({title="Dummy", description, deadline, done, id, markTodoAsCompleted}) {
+
+
+  const [checked, setChecked] = useState(done);
+
+  const toggleCheck = () => {
+    setChecked(prev => !prev);
+  };
+
+  useEffect(() => {
+    markTodoAsCompleted(id, checked)
+  },[checked])
 
 
   return (
-    <TodoItemContainer>
+    <TodoItemContainer onClick={toggleCheck}>
         <TodoItemTitle>{title}</TodoItemTitle>
         
         <TodoItemDescription>{description}</TodoItemDescription>
 
         {deadline && <TodoDeadline>{deadline}</TodoDeadline>}
+        <CheckBox control={<Checkbox checked={checked} />} />
+        <Button onClick={() => console.log(id)}>print</Button>
 
     </TodoItemContainer>
   )
