@@ -1,6 +1,5 @@
 import './App.css';
 import Navbar from './components/navbar/Navbar';
-import TodoZoznam from './routes/TodoZoznam';
 import CreateTodoZoznam from './routes/CreateTodoZoznam';
 import {
   BrowserRouter,
@@ -19,7 +18,7 @@ function App() {
           <Navbar />
 
           <Routes>
-            <Route path='/' element={<TodoZoznam />}/>
+            <Route path='/' element={<CreateTodoZoznam />}/>
             <Route path='/:zoznam' element={<Zoznam />}/>
             <Route path='createTodoZoznam' element={<CreateTodoZoznam />}/>
           </Routes>

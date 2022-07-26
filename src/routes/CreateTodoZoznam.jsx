@@ -89,6 +89,7 @@ export default function CreateTodoZoznam() {
   const sendDataToApi = () => {
     const todoZoznam = {
       zoznamTitle: todoZoznamTitle,
+      completed: false,
       todoItems: [...todoItems]
     }
     axios.post("https://6288f3d010e93797c160f01a.mockapi.io/todo", todoZoznam)

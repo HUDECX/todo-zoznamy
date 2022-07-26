@@ -14,11 +14,6 @@ const TodoItemContainer = styled.div`
   border-radius: 2rem;
   padding: 2rem;
   border: 3px solid black;
-  cursor: pointer;
-  transition: border-color .2s ease-in-out; 
-  &:hover{
-    border-color: white;
-  }
 `;
 
 const TodoItemTitle = styled.h2`
@@ -29,36 +24,26 @@ const TodoItemDescription = styled.p`
     word-wrap: break-word;
 `;
 
-const CheckBox = styled(FormControlLabel)`
-  display: inline;
-  .MuiFormGroup-root .css-dmmspl-MuiFormGroup-root{
-    display: inline-flex!important;
-  }
-  .Mui-checked{
-    color: white!important;
-    fill: white!important;
-  }
-  
+const TodoDeadline = styled.p`
+  background-color: black;
+  display: inline-block;
+  padding: 1rem;
+  border-radius: 2rem;
 `;
 
-export default function TodoItem({title="Dummy", description}) {
 
-  const [checked, setChecked] = useState(false);
 
-  const toggleCheck = () => {
-    setChecked(prev => !prev);
-  };
+export default function TodoItem({title="Dummy", description, deadline}) {
+
 
 
   return (
-    <TodoItemContainer onClick={toggleCheck}>
+    <TodoItemContainer>
         <TodoItemTitle>{title}</TodoItemTitle>
         
         <TodoItemDescription>{description}</TodoItemDescription>
 
-        <FormGroup>
-          <CheckBox control={<Checkbox checked={checked}/>} />
-        </FormGroup>
+        {deadline && <TodoDeadline>{deadline}</TodoDeadline>}
 
     </TodoItemContainer>
   )
