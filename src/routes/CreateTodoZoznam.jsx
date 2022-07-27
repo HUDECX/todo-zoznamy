@@ -114,8 +114,16 @@ export default function CreateTodoZoznam({handleChange}) {
       })
       .finally(() => {
         handleChange();
+        window.location.reload()
       })
 
+  };
+
+  //function for handling title and checking if its max 13 char
+  const handleTitle = e => {
+    if(e.target.value.length === 32) return
+    console.log(e.target.value.length);
+    setTodoZoznamTitle(e.target.value);
   };
 
   return (
@@ -127,7 +135,7 @@ export default function CreateTodoZoznam({handleChange}) {
       <FormContainer>
 
         {/* text field pre zoznam title */}
-        <TextField id="filled-basic" label="Todo zoznam title" variant="filled" value={todoZoznamTitle} onChange={event => setTodoZoznamTitle(event.target.value)}/>
+        <TextField id="filled-basic" label="Title(max 32char)" variant="filled" value={todoZoznamTitle} onChange={event => handleTitle(event)}/>
 
         {/* sem sa vkladaju vsetky todo itemy na vytvorenie */}
         <TodoItemsContainer>

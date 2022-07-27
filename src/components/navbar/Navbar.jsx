@@ -12,7 +12,7 @@ const NavbarContainer = styled.div`
   background-color: grey;
   margin: 0;
   padding: 2rem 0;
-  flex: .1;
+  min-flex: .1;
   height: 100vh;
   display: flex;
   flex-flow: column;
@@ -34,7 +34,7 @@ const NavbarList = styled.ul`
 export default function Navbar({change}) {
 
 
-  const [navbarLinks,setNavbarLinks] = useState([]);
+  const [navbarLinks,setNavbarLinks] = useState();
   const [helper, setHelper] = useState(true);  //toto je helper state aby sa vedel updatnut navbar po vytvoreni noveho zoznamu
                                             //alebo po oznaceni mark as completed
 
@@ -60,7 +60,9 @@ export default function Navbar({change}) {
       
       <NavbarList>
 
-        {navbarLinks.map(link =>
+        {!navbarLinks && <div>loading</div>}
+
+        {navbarLinks && navbarLinks.map(link =>
           <NavbarLink
             key={link.id}
             to={`/${link.zoznamTitle}`}

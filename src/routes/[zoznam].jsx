@@ -134,7 +134,7 @@ export default function Zoznam({handleChange}) {
 
 
   return loading ? (
-    <h1>loading - waiting for MockApi</h1>
+    <div style={{flex: 1}}>loading - waiting for MockApi</div>
     ) : (
       
       <TodoZoznamContainer>
