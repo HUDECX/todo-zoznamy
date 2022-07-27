@@ -16,7 +16,7 @@ const NavbarAnchor = styled(Link)`
   padding: .5rem;
   border-radius: 1rem;
   &:hover{
-    text-decoration: underline;
+    border: 1px solid ${props => props.completed ? "green" : "red"};
   }
 `;
 

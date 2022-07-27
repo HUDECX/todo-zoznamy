@@ -7,7 +7,7 @@ import {
   Route,
 } from "react-router-dom";
 import Zoznam from './routes/[zoznam]';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 
 function App() {
@@ -15,9 +15,9 @@ function App() {
   // helper aby sa dal updatnut navbar
   const [change, setChange] = useState(true);
 
-  const handleChange = () => {
+  const handleChange = useCallback(() => {
     setChange(prev => !prev);
-  };
+  },[]);
 
   return (
     <div className="App">

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import TodoItem from '../components/zoznam/TodoItem';
 import { Button } from '@mui/material';
@@ -63,7 +63,7 @@ export default function Zoznam({handleChange}) {
 
   // ziska data z api a a ked sa resolvne promise tak tak si ulozi index pozadovaneho zoznamu podla zoznam = useParams
   // a ulozi pozadovany zoznam do usedZoznam a vypne loading
-  const getZoznamData = () => {
+  const getZoznamData = useCallback(() => {
     axios.get("https://6288f3d010e93797c160f01a.mockapi.io/todo") 
     .then(res => {
       const index = res.data.findIndex(todoZoznam => todoZoznam.zoznamTitle === zoznam);
@@ -75,7 +75,7 @@ export default function Zoznam({handleChange}) {
     .finally(() => {
       setLoading(false);
     })
-  };
+  },[zoznam]);
 
   // funkcia je na button ktory oznacuje cely zoznam ako completed
   // okopiruje cely zoznam a zneguje completed key aby sa to dalo prepinat 
@@ -99,7 +99,7 @@ export default function Zoznam({handleChange}) {
 
     getZoznamData()
 
-  },[zoznam]);
+  },[zoznam,getZoznamData]);
 
   // vzdy ked sa zmeni nieco v pouzivanom zozname a sa upravi aj na mockApi podla jeho ID, ale iba v pripade ze usedZoznam.id nieje undefined
   // aby sa zabranilo errorom
@@ -111,7 +111,7 @@ export default function Zoznam({handleChange}) {
               handleChange()
             });
 
-  },[usedZoznam])
+  },[usedZoznam,handleChange])
 
 
   //uplatni filter na todoItemy podla toho ktory je kliknuty (All/Done/Active)
@@ -122,6 +122,7 @@ export default function Zoznam({handleChange}) {
       }else if(item.todoTitle.toLowerCase().includes(searchText.toLowerCase())){
         return item
       }
+      return null
     })
   };
 

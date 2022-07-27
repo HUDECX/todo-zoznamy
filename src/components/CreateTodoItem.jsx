@@ -35,6 +35,7 @@ const RemoveTodoButton = styled(Button)`
 
 export default function CreateTodoItem({removeTodo ,getTodoData, id}) {
 
+
   const [todoTitle, setTodoTitle] = useState("");
   const [todoText, setTodoText] = useState("");
   const [todoDeadline, setTodoDeadline] = useState("");
@@ -52,16 +53,15 @@ export default function CreateTodoItem({removeTodo ,getTodoData, id}) {
     getTodoData(data);
   },[todoTitle,todoText,todoDeadline])
 
-
   return (
     <TodoItem>
         <TextField id="filled-basic" label="Todo title" variant="filled" value={todoTitle} onChange={(event) => setTodoTitle(event.target.value)}/>
         <TodoItemText aria-label="empty textarea" placeholder="Zadajte text pre toto Todo" value={todoText} onChange={(event) => setTodoText(event.target.value)} />
         <TextField
-          id="date"
+          id="datetime-local"
           label="Deadline"
-          type="date"
-          defaultValue="2017-05-24"
+          type="datetime-local"
+          defaultValue="2017-05-24T10:30"
           sx={{ width: 220, marginTop: "2rem" }}
           InputLabelProps={{
             shrink: true,
