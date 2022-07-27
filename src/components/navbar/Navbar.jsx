@@ -31,41 +31,34 @@ const NavbarList = styled.ul`
   height: 100%;
 `;
 
-
-
-
-
 export default function Navbar({change}) {
 
 
   const [navbarLinks,setNavbarLinks] = useState([]);
-  const [nieco, setNieco] = useState(0);
+  const [helper, setHelper] = useState(true);  //toto je helper state aby sa vedel updatnut navbar po vytvoreni noveho zoznamu
+                                            //alebo po oznaceni mark as completed
 
   useEffect(() => {
-    setNieco(prev => prev+1);
-    console.log(change);
+    setHelper(prev => !prev);
   },[change])
 
+  //po vytvoreni noveho zoznamu alebo kliknuti mark as completed sa fetchnu data znovu aby sa vedeli updatnut farby navbaru
   useEffect(() => {
     axios.get("https://6288f3d010e93797c160f01a.mockapi.io/todo")
-        .then(res => {
-          setNavbarLinks(res.data)
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        })
-  },[nieco])
+      .then(res => {
+        setNavbarLinks(res.data)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  },[helper])
 
   return (
     <NavbarContainer>
 
       <Link to="/createTodoZoznam"><Button variant='contained'><AddIcon /></Button></Link>
       
-
       <NavbarList>
-
-        
 
         {navbarLinks.map(link =>
           <NavbarLink
@@ -74,7 +67,6 @@ export default function Navbar({change}) {
             text={link.zoznamTitle}
             completed={link.completed}
           />)}
-        
 
       </NavbarList>
     </NavbarContainer>

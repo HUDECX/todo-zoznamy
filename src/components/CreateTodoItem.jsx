@@ -39,9 +39,8 @@ export default function CreateTodoItem({removeTodo ,getTodoData, id}) {
   const [todoText, setTodoText] = useState("");
   const [todoDeadline, setTodoDeadline] = useState("");
 
+  //po zmene nejakej hodnoty vo formulari odosle updatnute data pomocou getTodoData
   useEffect(() => {
-
-
     const data = {
       id,
       todoTitle,
